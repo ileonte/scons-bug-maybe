@@ -2,3 +2,4 @@
 **/build_dir/
 **/src/
 .sconsign.dblite
+**/scons-*/
