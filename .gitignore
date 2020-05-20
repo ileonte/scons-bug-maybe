@@ -1,0 +1,4 @@
+**/.mypy_cache/
+**/build_dir/
+**/src/
+.sconsign.dblite
