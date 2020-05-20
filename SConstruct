@@ -7,10 +7,10 @@ def add_program(env, ident, flags, src):
     prog_env = env.Clone()
     prog_env.MergeFlags(flags)
     obj = prog_env.Object(
-        target=f'#build_dir/prog{ident}',
+        target='#build_dir/prog{}'.format(ident),
         source=src)
     prog_env.Program(
-        target=f'#build_dir/prog{ident}',
+        target='#build_dir/prog{}'.format(ident),
         source=obj)
 
 
@@ -18,10 +18,10 @@ def add_library(env, ident, flags, src):
     lib_env = env.Clone()
     lib_env.MergeFlags(flags)
     obj = lib_env.SharedObject(
-        target=f'#build_dir/lib{ident}',
+        target='#build_dir/lib{}'.format(ident),
         source=lib_src)
     lib_env.SharedLibrary(
-        target=f'#build_dir/lib{ident}',
+        target='#build_dir/lib{}'.format(ident),
         source=obj)
 
 
@@ -32,7 +32,7 @@ flags = {
     'CPPDEFINES': ['DEF1=1', 'DEF2=2'],
 }
 
-env = Environment()
+env = Environment(tools=['default', 'textfile'])
 prog_src = env.Textfile(
     target='#src/prog.cpp',
     source=['int main() { return 0; }'])
@@ -43,14 +43,14 @@ lib_src = env.Textfile(
 
 idents = [i for i in range(3)]
 shuffle(idents)
-print(f'Target add order: {idents}')
+print('Target add order: {}'.format(idents))
 
-print(f'original -> {flags}')
+print('original -> {}'.format(flags))
 for ident in idents:
     # replace `flags` with `deepcopy(flags)` to work-around the problem
     add_program(env, ident, flags, prog_src)
-    print(f'prog{ident}    -> {flags}')
+    print('prog{}    -> {}'.format(ident, flags))
     if ident % 2 == 0:
         # replace `flags` with `deepcopy(flags)` to work-around the problem
         add_library(env, ident, flags, lib_src)
-        print(f'lib{ident}     -> {flags}')
+        print('lib{}     -> {}'.format(ident, flags))
